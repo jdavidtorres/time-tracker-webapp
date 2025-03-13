@@ -1,37 +1,47 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://your-backend-api.com/api/auth';
+	private apiUrl = 'http://localhost/api/auth';
+	private readonly httpHeader = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-  constructor(private http: HttpClient) { }
+	constructor(private http: HttpClient) { }
 
-  login(email: string, password: string) {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, { email, password })
-      .subscribe(response => {
-        localStorage.setItem('access_token', response.token);
-      });
-  }
+	register(username: string, password: string) {
+		return this.http.post<any>(`${this.apiUrl}/register`, { username, password }, { headers: this.httpHeader })
+			.subscribe();
+	}
 
-  logout() {
-    localStorage.removeItem('access_token');
-  }
+	login(username: string, password: string) {
+		return this.http.post<any>(`${this.apiUrl}/login`, { username, password }, { headers: this.httpHeader })
+			.subscribe(response => {
+				localStorage.setItem('token', response.token);
+			});
+	}
 
-  isAuthenticated(): boolean {
-    const token = this.getToken();
-    // Check if token exists and is not expired
-    return !!token && !this.isTokenExpired(token);
-  }
+	logout() {
+		localStorage.removeItem('token');
+	}
 
-  private getToken(): string | null {
-    return localStorage.getItem('access_token');
-  }
+	getUsername(): string | null {
+		const token = this.getToken();
+		if (!token) {
+			return null;
+		}
 
-  private isTokenExpired(token: string): boolean {
-    const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
-    return (Math.floor((new Date).getTime() / 1000)) >= expiry;
-  }
+		const payload = JSON.parse(atob(token.split('.')[1]));
+		return payload.username;
+	}
+
+	isAuthenticated(): boolean {
+		return !!this.getToken();
+	}
+
+	getToken(): string | null {
+		return localStorage.getItem('token');
+	}
 }
