@@ -19,8 +19,7 @@ import { AuthService } from '../../services/auth.service';
 		InputTextModule,
 		ButtonModule
 	],
-	templateUrl: './register.component.html',
-	styleUrl: './register.component.css'
+	templateUrl: './register.component.html'
 })
 export class RegisterComponent {
 	username: string = '';
