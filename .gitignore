@@ -1,8 +1,33 @@
-# Node.js dependencies
-node_modules/
+# Node
+/node_modules
 
 # Build output
-dist/
+/dist
+/tmp
+/out-tsc
+/bazel-out
 
-# Environment variables
+# IDEs and editors
+.idea/
+.run/
+.project
+.classpath
+.settings/
+
+# Visual Studio Code
+.vscode/*
+.history/*
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# System files
+.DS_Store
+Thumbs.db
 .env
