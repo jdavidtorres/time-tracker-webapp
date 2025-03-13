@@ -1,27 +1,40 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { Router, RouterLink } from '@angular/router';
+import { FloatLabelModule } from 'primeng/floatlabel';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html'
+	selector: 'app-login',
+	templateUrl: './login.component.html',
+	imports: [
+		CommonModule,
+		FormsModule,
+		RouterLink,
+		CardModule,
+		FloatLabelModule,
+		InputTextModule,
+		ButtonModule
+	]
 })
 export class LoginComponent implements OnInit {
-  loginForm: FormGroup;
 
-  constructor(private authService: AuthService, private fb: FormBuilder) { }
+	constructor(private readonly authService: AuthService, private readonly router: Router) { }
 
-  ngOnInit(): void {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
-    });
-  }
+	username: string = '';
+	password: string = '';
 
-  onSubmit(): void {
-    if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
-      this.authService.login(email, password);
-    }
-  }
+	ngOnInit(): void {
+		if (this.authService.isAuthenticated()) {
+			this.router.navigate(['/']);
+		}
+	}
+
+	onSubmit(): void {
+		this.authService.login(this.username, this.password);
+	}
 }
