@@ -18,8 +18,13 @@ export class AuthService {
 
 	login(username: string, password: string) {
 		return this.http.post<any>(`${this.apiUrl}/login`, { username, password }, { headers: this.httpHeader })
-			.subscribe(response => {
-				localStorage.setItem('token', response.token);
+			.subscribe({
+				next: (response: any) => {
+					localStorage.setItem('token', response.token);
+				},
+				error: (error: any) => {
+					console.error(error);
+				}
 			});
 	}
 
