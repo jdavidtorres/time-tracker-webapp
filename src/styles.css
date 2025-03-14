@@ -16,3 +16,22 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	background: light-dark(var(--p-surface-0), var(--p-surface-950));
 }
+
+/* Fix para clases de color que no se aplican correctamente */
+.text-blue-500 {
+    color: #3B82F6 !important;
+}
+
+.text-blue-500:hover {
+    color: #2563EB !important;
+    text-decoration: underline;
+}
+
+/* Otras clases de texto de PrimeFlex que pueden necesitar corrección */
+.text-900 {
+    color: #212121 !important;
+}
+
+.text-600 {
+    color: #757575 !important;
+}
