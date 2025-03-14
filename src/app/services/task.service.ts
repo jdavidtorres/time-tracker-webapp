@@ -1,27 +1,46 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Task } from '../models/Task';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class TaskService {
-  private apiUrl = 'https://your-backend-api.com/api/tasks';
+	private apiUrl = 'http://localhost/api/tasks';
+	private readonly httpHeader = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-  constructor(private http: HttpClient) { }
+	constructor(private http: HttpClient) { }
 
-  getTasks() {
-    return this.http.get(`${this.apiUrl}`);
-  }
+	getTasks(): Observable<Task> {
+		return this.http.get<Task>(`${this.apiUrl}`);
+	}
 
-  createTask(task: any) {
-    return this.http.post(`${this.apiUrl}`, task);
-  }
+	createTask(task: Task): Observable<Task> {
+		return this.http.post<Task>(`${this.apiUrl}`, task);
+	}
 
-  updateTask(task: any) {
-    return this.http.put(`${this.apiUrl}/${task.id}`, task);
-  }
+	updateTask(task: Task): Observable<Task> {
+		return this.http.put<Task>(`${this.apiUrl}/${task.id}`, task);
+	}
 
-  deleteTask(taskId: number) {
-    return this.http.delete(`${this.apiUrl}/${taskId}`);
-  }
+	deleteTask(taskId: string): Observable<void> {
+		return this.http.delete<void>(`${this.apiUrl}/${taskId}`);
+	}
+
+	startTaskTimer(taskId: string) {
+		return this.http.post(`${this.apiUrl}/${taskId}/start`, {});
+	}
+
+	pauseTaskTimer(taskId: string) {
+		return this.http.post(`${this.apiUrl}/${taskId}/pause`, {});
+	}
+
+	resumeTaskTimer(taskId: string) {
+		return this.http.post(`${this.apiUrl}/${taskId}/resume`, {});
+	}
+
+	stopTaskTimer(taskId: string) {
+		return this.http.post(`${this.apiUrl}/${taskId}/stop`, {});
+	}
 }
